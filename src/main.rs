@@ -1,18 +1,47 @@
-use argh::FromArgs;
+use structopt::StructOpt;
 
-#[derive(FromArgs, Debug)]
+#[derive(StructOpt, Debug)]
 /// parse args
 struct ArgVals {
-    /// some test thing
-    #[argh(option)]
-    test: i32,
+    #[structopt(subcommand)]
+    cmd: Command,
+
+    #[structopt(short, long)]
+    verbose: bool,
+}
+
+#[derive(StructOpt, Debug)]
+/// list of commands
+enum Command {
+    Tag(TagCommand),
+    Search(SearchCommand),
+}
+
+#[derive(StructOpt, Debug)]
+/// set a new tag
+struct TagCommand {
+    /// item to tag
+    object: String,
+
+    /// tags to apply
+    tags: Vec<String>,
+}
+
+#[derive(StructOpt, Debug)]
+/// search through tag DB
+struct SearchCommand {
+    /// query string
+    query: String,
 }
 
 fn main() {
-    println!("Hello, world!");
+    let av = ArgVals::from_args();
 
-    let av: ArgVals = argh::from_env();
+    match av.cmd {
+        Command::Tag(asdf) => println!("going to tag {:?}", asdf),
+        Command::Search(asdf) => println!("going to search {:?}", asdf),
+    }
 
-    println!("{:?}", av);
+    println!("verbose {:?}", av.verbose);
 
 }
