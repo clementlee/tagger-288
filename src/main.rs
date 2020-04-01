@@ -42,6 +42,7 @@ struct SearchCommand {
 
 mod search;
 mod tagdb;
+mod types;
 
 fn main() {
     let av = ArgVals::from_args();
