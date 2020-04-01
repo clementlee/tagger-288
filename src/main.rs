@@ -6,6 +6,12 @@ struct ArgVals {
     #[structopt(subcommand)]
     cmd: Command,
 
+    #[structopt(flatten)]
+    globals: GlobalOpts,
+}
+
+#[derive(StructOpt, Debug)]
+struct GlobalOpts {
     #[structopt(short, long)]
     verbose: bool,
 }
@@ -34,14 +40,14 @@ struct SearchCommand {
     query: String,
 }
 
+mod search;
+mod tagdb;
+
 fn main() {
     let av = ArgVals::from_args();
 
     match av.cmd {
-        Command::Tag(asdf) => println!("going to tag {:?}", asdf),
-        Command::Search(asdf) => println!("going to search {:?}", asdf),
+        Command::Tag(tagcmd) => tagdb::tag(&tagcmd, &av.globals),
+        Command::Search(searchcmd) => search::search(&searchcmd, &av.globals),
     }
-
-    println!("verbose {:?}", av.verbose);
-
 }
