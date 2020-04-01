@@ -1,10 +1,10 @@
+use std::collections::HashSet;
 use std::path::Path;
-
-use crate::GlobalOpts;
-use crate::TagCommand;
 
 use crate::types;
 use crate::types::TagFormat;
+use crate::GlobalOpts;
+use crate::TagCommand;
 
 pub(crate) fn tag(tagcmd: &TagCommand, globals: &GlobalOpts) {
     println!("{:?}, {:?}", tagcmd, globals);
@@ -20,14 +20,13 @@ pub(crate) fn tag(tagcmd: &TagCommand, globals: &GlobalOpts) {
             println!("Creating new tag object");
             TagFormat {
                 object: tagcmd.object.clone(),
-                tags: [].to_vec(),
+                tags: HashSet::new(),
             }
         }
     };
 
-    let mut newtags = tagcmd.tags.clone();
-    println!("Adding new tags: {:?}", newtags);
-    tags.tags.append(&mut newtags);
+    println!("Adding new tags: {:?}", tagcmd.tags);
+    tags.tags.extend(tagcmd.tags.clone());
 
     types::save(&tags, &filepath);
 }

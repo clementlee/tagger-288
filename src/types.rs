@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 use std::fmt;
 use std::fs;
 use std::path::Path;
@@ -8,7 +9,7 @@ use serde::{Deserialize, Serialize};
 /// what the format should look like
 pub struct TagFormat {
     pub object: String,
-    pub tags: Vec<String>,
+    pub tags: HashSet<String>,
 }
 
 impl fmt::Display for TagFormat {
